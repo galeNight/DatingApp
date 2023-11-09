@@ -12,7 +12,7 @@ namespace DatingApp.Repository
             _configuration = Config;
             _connstring = _configuration.GetConnectionString("DefaultConnection");
         }
-        public void AddUser(User user)
+        public void AddUser(User user) // add user
         {
             using (SqlConnection conn =new SqlConnection())
             {
@@ -30,7 +30,7 @@ namespace DatingApp.Repository
             conn.Close();
             }
         }
-        public User GetUserByUsername(string username)
+        public User GetUserByUsername(string username)//get user by name
         {
             using(SqlConnection conn =new SqlConnection())
             {
