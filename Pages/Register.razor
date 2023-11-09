@@ -7,13 +7,13 @@
 
 <h3>Register</h3>
 
-<from @onsubmit="RegisterUser">
-    <InputText @bind-Value="user.Username" placeholer="Username"></InputText>
-    <InputText @bind-Value="user.Password1" placeholer="Password"></InputText>
-    <InputText @bind-Value="user.Email" placeholer="Email"></InputText>
+<EditForm Model="@user" OnInvalidSubmit="RegisterUser" >
+    <InputText @bind-Value="user.Username" placeholder="User name"></InputText>
+    <InputText @bind-Value="user.Password1" placeholder="Password"></InputText>
+    <InputText @bind-Value="user.Email" placeholder="Email"></InputText>
     <InputText @bind-Value="user.Userrole" placeholder="Userrole"></InputText>
     <button type="submit">Register</button>
-</from>
+</EditForm>
 
 @code {
     private User user = new User();
