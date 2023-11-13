@@ -19,6 +19,7 @@ namespace DatingApp
             builder.Services.AddSingleton<WeatherForecastService>();
             builder.Services.AddScoped<UserRepository>();
             builder.Services.AddScoped<Login>();
+            builder.Services.AddSingleton<User>();
             builder.Configuration.GetConnectionString("DefaultConnection");
             var app = builder.Build();
 

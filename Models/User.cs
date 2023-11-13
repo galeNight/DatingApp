@@ -7,5 +7,6 @@
         public string Password1 { get; set; }
         public string Email { get; set; }
         public string Userrole { get; set; }
+        public bool HasProfile { get; set; }
     }
 }

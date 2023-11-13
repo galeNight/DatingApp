@@ -23,14 +23,16 @@
     private string errorMessage = "";
     private void LoginUser()
     {
-        User user = repo.GetUserByUsername(login.Username);
-        if(user!=null && user.Password1 == login.Password1)
+        User user = repo.AuthenticateUser(login.Username, login.Password1);
+
+        if (user != null)
         {
-            NM.NavigateTo("");
+            // Successful login
+            NM.NavigateTo(""); // Redirect to the home page or another page
         }
         else
         {
-            errorMessage = "Invalid username or Password. Please try again";
+            errorMessage = "Invalid username or password. Please try again";
         }
     }
 }

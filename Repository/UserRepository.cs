@@ -1,4 +1,5 @@
 ﻿using DatingApp.Models;
+using System.Data;
 using System.Data.SqlClient;
 
 namespace DatingApp.Repository
@@ -14,30 +15,32 @@ namespace DatingApp.Repository
         }
         public void AddUser(User user) // add user
         {
-            using (SqlConnection conn =new SqlConnection())
+            using (SqlConnection conn = new SqlConnection(_connstring))
             {
-
                 conn.Open();
-                using (SqlCommand cmd = new SqlCommand("INSERT INTO Account(USername,Password1,Email,Userrole " +
-                "Values (@Username,@Password1,@Email,@Userrole", conn))
+                using (SqlCommand cmd = new SqlCommand("dbo.Addacount", conn))
                 {
+                    cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@Username", user.Username);
                     cmd.Parameters.AddWithValue("@Password1", user.Password1);
-                    cmd.Parameters.AddWithValue("@Email", user.Email);
-                    cmd.Parameters.AddWithValue("@Userrole", user.Userrole);
+                    cmd.Parameters.AddWithValue("Email", user.Email);
+                    cmd.Parameters.AddWithValue("Userrole", user.Userrole);
                     cmd.ExecuteNonQuery();
                 }
-            conn.Close();
+                conn.Close();
             }
         }
-        public User GetUserByUsername(string username)//get user by name
+        public User AuthenticateUser(string username, string password)
         {
-            using(SqlConnection conn =new SqlConnection())
+            using (SqlConnection conn = new SqlConnection(_connstring))
             {
-
-                using (SqlCommand cmd = new SqlCommand("SELECT * FROM Account WHERE Username =@Username",conn))
+                conn.Open();
+                using (SqlCommand cmd = new SqlCommand("AuthenticateUser", conn))
                 {
+                    cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@Username", username);
+                    cmd.Parameters.AddWithValue("@Password1", password);
+
                     using(SqlDataReader reader = cmd.ExecuteReader())
                     {
                         if(reader.Read())
@@ -46,15 +49,12 @@ namespace DatingApp.Repository
                             {
                                 UserId = (int)reader["UserId"],
                                 Username = reader["Username"].ToString(),
-                                Password1 = reader["Password1"].ToString(),
-                                Email = reader["Email"].ToString(),
                                 Userrole = reader["Userrole"].ToString()
                             };
                         }
-                        return null;//user not found
+                        return null;// user not found or invalid credentials
                     }
                 }
-                conn.Close();
             }
         }
     }

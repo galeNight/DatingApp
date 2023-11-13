@@ -1,13 +1,14 @@
 ﻿@using DatingApp.Repository
 @using DatingApp.Models
-@inject UserRepository userRepository
+@inject UserRepository userRepo
 @inject NavigationManager NM
 @inject IConfiguration Iconfig
+@inject User user
 @page "/Register"
 
 <h3>Register</h3>
 
-<EditForm Model="@user" OnInvalidSubmit="RegisterUser" >
+<EditForm Model="@user" OnValidSubmit="RegisterUser" >
     <InputText @bind-Value="user.Username" placeholder="User name"></InputText>
     <InputText @bind-Value="user.Password1" placeholder="Password"></InputText>
     <InputText @bind-Value="user.Email" placeholder="Email"></InputText>
@@ -16,12 +17,11 @@
 </EditForm>
 
 @code {
-    private User user = new User();
 
     private void RegisterUser()
     {
-        userRepository = new UserRepository(Iconfig);
-        userRepository.AddUser(user);
-        NM.NavigateTo("Login");
+        userRepo = new UserRepository(Iconfig);
+        userRepo.AddUser(user);
+        NM.NavigateTo("/UserLogin");
     }
 }
