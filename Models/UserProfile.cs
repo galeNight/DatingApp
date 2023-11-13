@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace DatingApp.Models
+﻿namespace DatingApp.Models
 {
     public class UserProfile
     {
@@ -9,5 +7,8 @@ namespace DatingApp.Models
         public DateTime Brithdate { get; set; }
         public string Height { get; set; }
         public string Aboutme { get; set; }
+        public int Cityid { get; set; }
+        public int Genderid { get; set; }
+        public int UserId { get; set; }
     }
 }

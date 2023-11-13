@@ -57,5 +57,42 @@ namespace DatingApp.Repository
                 }
             }
         }
+        public User GetUser(int? userId, string username, string password, string email, string userrole)
+        {
+            using (SqlConnection conn = new SqlConnection(_connstring))
+            {
+                conn.Open();
+
+                using(SqlCommand cmd =new SqlCommand("GetUser", conn))
+                {
+                    cmd.CommandType= CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@UserId", userId);
+                    cmd.Parameters.AddWithValue("@Username", username);
+                    cmd.Parameters.AddWithValue("@Password1", password);
+                    cmd.Parameters.AddWithValue("@Email", email);
+                    cmd.Parameters.AddWithValue("Userrole", userrole);
+                    
+                    using(SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if(reader.Read())
+                        {
+                            User user = new User
+                            {
+                                UserId = reader.GetInt32(0),
+                                Username = reader.GetString(1),
+                                Password1 = reader.GetString(2),
+                                Email = reader.GetString(3),
+                                Userrole = reader.GetString(4)
+                            };
+                            return user;
+                        }
+                        else
+                        {
+                            return null;
+                        }
+                    }
+                }
+            }
+        }
     }
 }

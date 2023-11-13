@@ -1,5 +1,41 @@
-﻿<h3>CreateProfile</h3>
+﻿@page "/CreateProfile"
+@using DatingApp.Models
+@using DatingApp.Pages
+@inject NavigationManager NM
+@inject UserProfile UserProfile
+
+<h3>CreateProfile</h3>
+
+<EditForm Model="@UserProfile" OnValidSubmit="SaveProfile">
+    <DataAnnotationsValidator/>
+    <ValidationSummary/>
+
+    <div class="from-group">
+        <label for="Username">User name:</label>
+        <InputText @bind-Value="UserProfile.Username" class="from-control" placeholder="user name"></InputText>
+    </div>
+
+    <div class="from-group">
+        <label for="Brithdate">Brithdate:</label>
+        <InputDate @bind-Value="UserProfile.Brithdate" class="form-control" placeholder="Date of Birth"></InputDate>
+    </div>
+
+    <div class="from-group">
+        <label for="Height">Height:</label>
+        <InputText @bind-Value="UserProfile.Height" class="form-control" placeholder="Height"></InputText>
+    </div>
+
+    <div class="form-group">
+        <label for="Aboutme">About me:</label>
+        <InputText @bind-Value="UserProfile.Aboutme" class="form-control" placeholder="who are you"></InputText>
+    </div>
+
+
+</EditForm>
 
 @code {
-
+    private void SaveProfile()
+    {
+        
+    }
 }

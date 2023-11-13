@@ -25,10 +25,17 @@
     {
         User user = repo.AuthenticateUser(login.Username, login.Password1);
 
-        if (user != null)
-        {
-            // Successful login
-            NM.NavigateTo(""); // Redirect to the home page or another page
+        if(user != null)
+        {    
+            if (user.HasProfile)
+            {
+                // Successful login
+                NM.NavigateTo("/Profile"); // Redirect to the home page or another page
+            }
+            else
+            {
+                NM.NavigateTo("/CreateProfile");
+            }
         }
         else
         {
