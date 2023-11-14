@@ -20,6 +20,7 @@ namespace DatingApp
             builder.Services.AddScoped<UserRepository>();
             builder.Services.AddScoped<Login>();
             builder.Services.AddSingleton<User>();
+            builder.Services.AddSingleton<UserProfile>();
             builder.Configuration.GetConnectionString("DefaultConnection");
             var app = builder.Build();
 

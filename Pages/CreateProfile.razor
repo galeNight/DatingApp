@@ -1,8 +1,10 @@
 ﻿@page "/CreateProfile"
 @using DatingApp.Models
 @using DatingApp.Pages
+@using DatingApp.Repository
 @inject NavigationManager NM
 @inject UserProfile UserProfile
+@inject UserRepository repo
 
 <h3>CreateProfile</h3>
 
@@ -29,13 +31,40 @@
         <label for="Aboutme">About me:</label>
         <InputText @bind-Value="UserProfile.Aboutme" class="form-control" placeholder="who are you"></InputText>
     </div>
+    <div>
+        <label class="form-group"></label>
+        <select @bind="UserProfile.Genderid" class="form-control" placeholder="Gender">
+            @foreach(var gender in repo.GetGenders())
+            {
+                <option value="@gender.GenderId">@gender.gender </option>
+            }
+        </select>
+    <div class="form-group">
+        <label for="City">City</label>
+            <select @bind="UserProfile.Cityid" class="form-control" placeholder="choose City">
+        @foreach(var city in repo.GetCities())
+        {
+            <option value="@city.Cityid">@city.city</option>
+        }
+        </select>
+    </div>
+    </div>
 
-
+    <button type="submit" class="btn btn-primary">Save Provile</button>
 </EditForm>
 
 @code {
+    private string errorMessage = "";
+    private List<City> Cities;
+    private List<Gender> Genders;
     private void SaveProfile()
     {
-        
+        repo.SaveUserProfile(UserProfile);
+        NM.NavigateTo("/");
+    }
+    protected override void OnInitialized()
+    {
+        Genders = repo.GetGenders();
+        Cities = repo.GetCities();
     }
 }

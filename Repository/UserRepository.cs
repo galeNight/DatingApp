@@ -18,7 +18,7 @@ namespace DatingApp.Repository
             using (SqlConnection conn = new SqlConnection(_connstring))
             {
                 conn.Open();
-                using (SqlCommand cmd = new SqlCommand("dbo.Addacount", conn))
+                using (SqlCommand cmd = new SqlCommand("Addacount", conn))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@Username", user.Username);
@@ -62,8 +62,7 @@ namespace DatingApp.Repository
             using (SqlConnection conn = new SqlConnection(_connstring))
             {
                 conn.Open();
-
-                using(SqlCommand cmd =new SqlCommand("GetUser", conn))
+                using(SqlCommand cmd = new SqlCommand("GetUser", conn))
                 {
                     cmd.CommandType= CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@UserId", userId);
@@ -92,6 +91,75 @@ namespace DatingApp.Repository
                         }
                     }
                 }
+            }
+        }
+        public List<City> GetCities()
+        {
+            List<City> cities = new List<City>();
+            using(SqlConnection conn = new SqlConnection(_connstring))
+            {
+                conn.Open();
+                using(SqlCommand cmd = new SqlCommand("select Cityid, city from City", conn))
+                {
+                    using(SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while(reader.Read())
+                        {
+                            City c = new City();
+                            {
+                                c.Cityid = reader.GetInt32(0);
+                                c.city = reader.GetString(1);
+                                
+                            };
+                            cities.Add(c);
+                        }
+                    }
+                }
+            }
+            return cities;
+        }
+        public List<Gender> GetGenders()
+        {
+            List<Gender> genders = new List<Gender>();
+            using(SqlConnection conn = new SqlConnection(_connstring))
+            {
+                conn.Open();
+                using(SqlCommand cmd = new SqlCommand("select GenderId, gender from Gender", conn))
+                {
+                    using(SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while(reader.Read())
+                        {
+                            Gender g = new Gender();
+                            {
+                                g.GenderId = reader.GetInt32(0);
+                                g.gender = reader.GetString(1);
+                            };
+                            genders.Add(g);
+                        }
+                    }
+                }
+            }
+            return genders;
+        }
+        public void SaveUserProfile(UserProfile repo)
+        {
+            using (SqlConnection conn = new SqlConnection(_connstring))
+            {
+                conn.Open();
+                using(SqlCommand cmd = new SqlCommand("SaveUserProfile", conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@Username", repo.Username);
+                    cmd.Parameters.AddWithValue("@Brithdate", repo.Brithdate);
+                    cmd.Parameters.AddWithValue("@Height", repo.Height);
+                    cmd.Parameters.AddWithValue("@Aboutme", repo.Aboutme);
+                    cmd.Parameters.AddWithValue("@Cityid", repo.Cityid);
+                    cmd.Parameters.AddWithValue("@Genderid", repo.Genderid);
+                    cmd.Parameters.AddWithValue("@UserId", repo.UserId);
+                    cmd.ExecuteNonQuery();
+                }
+                conn.Close();
             }
         }
     }
