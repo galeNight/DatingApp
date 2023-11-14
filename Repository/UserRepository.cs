@@ -30,7 +30,7 @@ namespace DatingApp.Repository
                 conn.Close();
             }
         }
-        public User AuthenticateUser(string username, string password)
+        public User AuthenticateUser(string username, string password)//AuthenticateUser
         {
             using (SqlConnection conn = new SqlConnection(_connstring))
             {
@@ -57,7 +57,7 @@ namespace DatingApp.Repository
                 }
             }
         }
-        public User GetUser(int? userId, string username, string password, string email, string userrole)
+        public User GetUser(int? userId, string username, string password, string email, string userrole)//GetUser
         {
             using (SqlConnection conn = new SqlConnection(_connstring))
             {
@@ -93,7 +93,7 @@ namespace DatingApp.Repository
                 }
             }
         }
-        public List<City> GetCities()
+        public List<City> GetCities()//GetCities
         {
             List<City> cities = new List<City>();
             using(SqlConnection conn = new SqlConnection(_connstring))
@@ -118,7 +118,7 @@ namespace DatingApp.Repository
             }
             return cities;
         }
-        public List<Gender> GetGenders()
+        public List<Gender> GetGenders()//GetGenders
         {
             List<Gender> genders = new List<Gender>();
             using(SqlConnection conn = new SqlConnection(_connstring))
