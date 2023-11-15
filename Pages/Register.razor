@@ -21,7 +21,7 @@
     private void RegisterUser()
     {
         userRepo = new UserRepository(Iconfig);
-        userRepo.AddUser(user);
+        userRepo.AddAccountUser(user);
         NM.NavigateTo("/UserLogin");
     }
 }

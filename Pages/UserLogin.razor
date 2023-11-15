@@ -30,11 +30,11 @@
             if (user.HasProfile)
             {
                 // Successful login
-                NM.NavigateTo("/Profile"); // Redirect to the home page or another page
+                NM.NavigateTo("");
             }
             else
             {
-                NM.NavigateTo("/CreateProfile");
+                NM.NavigateTo($"/CreateProfile/{user.UserId}");
             }
         }
         else

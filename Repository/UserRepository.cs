@@ -13,7 +13,7 @@ namespace DatingApp.Repository
             _configuration = Config;
             _connstring = _configuration.GetConnectionString("DefaultConnection");
         }
-        public void AddUser(User user) // add user
+        public void AddAccountUser(User user) // add user
         {
             using (SqlConnection conn = new SqlConnection(_connstring))
             {
@@ -153,6 +153,9 @@ namespace DatingApp.Repository
                     cmd.Parameters.AddWithValue("@Username", repo.Username);
                     cmd.Parameters.AddWithValue("@Brithdate", repo.Brithdate);
                     cmd.Parameters.AddWithValue("@Height", repo.Height);
+                    cmd.Parameters.AddWithValue("@Firstname", repo.Firstname);
+                    cmd.Parameters.AddWithValue("@Middlename", repo.Middlename);
+                    cmd.Parameters.AddWithValue("@Lastname", repo.Lastname);
                     cmd.Parameters.AddWithValue("@Aboutme", repo.Aboutme);
                     cmd.Parameters.AddWithValue("@Cityid", repo.Cityid);
                     cmd.Parameters.AddWithValue("@Genderid", repo.Genderid);

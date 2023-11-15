@@ -1,4 +1,5 @@
 ﻿@page "/CreateProfile"
+@page "/CreateProfile/{id:int}"
 @using DatingApp.Models
 @using DatingApp.Pages
 @using DatingApp.Repository
@@ -11,12 +12,27 @@
 <EditForm Model="@UserProfile" OnValidSubmit="SaveProfile">
     <DataAnnotationsValidator/>
     <ValidationSummary/>
-
+    
+    <div class="from-group">
+        <label for="Username">account owner id:</label>
+        <label> @UserProfile.UserId</label>
+    </div>
     <div class="from-group">
         <label for="Username">User name:</label>
         <InputText @bind-Value="UserProfile.Username" class="from-control" placeholder="user name"></InputText>
     </div>
-
+    <div class="from-group">
+        <label for="Firstname">Firstname:</label>
+        <InputText @bind-Value="UserProfile.Firstname" class="form-control" placeholder="Firstname"></InputText>
+    </div>
+    <div class="from-group">
+        <label for="Middlename">Middlename:</label>
+        <InputText @bind-Value="UserProfile.Middlename" class="form-control" placeholder="Middlename"></InputText>
+    </div>
+    <div class="from-group">
+        <label for="Lastname">Lastname:</label>
+        <InputText @bind-Value="UserProfile.Lastname" class="form-control" placeholder="Lastname"></InputText>
+    </div>
     <div class="from-group">
         <label for="Brithdate">Brithdate:</label>
         <InputDate @bind-Value="UserProfile.Brithdate" class="form-control" placeholder="Date of Birth"></InputDate>
@@ -32,28 +48,29 @@
         <InputText @bind-Value="UserProfile.Aboutme" class="form-control" placeholder="who are you"></InputText>
     </div>
     <div>
-        <label class="form-group"></label>
-        <select @bind="UserProfile.Genderid" class="form-control" placeholder="Gender">
+        <label for="Gender" class="form-group">Gender</label>
+        <select @bind="UserProfile.Genderid" class="form-control">
             @foreach(var gender in repo.GetGenders())
             {
                 <option value="@gender.GenderId">@gender.gender </option>
             }
         </select>
+    </div>
     <div class="form-group">
         <label for="City">City</label>
-            <select @bind="UserProfile.Cityid" class="form-control" placeholder="choose City">
+        <select @bind="UserProfile.Cityid" class="form-control">
         @foreach(var city in repo.GetCities())
         {
-            <option value="@city.Cityid">@city.city</option>
+             <option value="@city.Cityid">@city.city"</option>
         }
         </select>
     </div>
-    </div>
-
     <button type="submit" class="btn btn-primary">Save Provile</button>
 </EditForm>
 
 @code {
+    [Parameter]
+    public int Id{ get; set; }
     private string errorMessage = "";
     private List<City> Cities;
     private List<Gender> Genders;
@@ -66,5 +83,6 @@
     {
         Genders = repo.GetGenders();
         Cities = repo.GetCities();
+        UserProfile.UserId = Id;
     }
 }
