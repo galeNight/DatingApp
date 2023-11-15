@@ -154,7 +154,7 @@ namespace DatingApp.Repository
                     cmd.Parameters.AddWithValue("@Brithdate", repo.Brithdate);
                     cmd.Parameters.AddWithValue("@Height", repo.Height);
                     cmd.Parameters.AddWithValue("@Firstname", repo.Firstname);
-                    cmd.Parameters.AddWithValue("@Middlename",(object)repo.Lastname ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@Middlename", (object)repo.Lastname ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@Lastname", repo.Lastname);
                     cmd.Parameters.AddWithValue("@Aboutme", repo.Aboutme);
                     cmd.Parameters.AddWithValue("@Cityid", repo.Cityid);
