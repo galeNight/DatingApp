@@ -14,12 +14,12 @@
     <ValidationSummary/>
     
     <div class="from-group">
-        <label for="Username">account owner id:</label>
+        <label for="Username">account user id:</label>
         <label> @UserProfile.UserId</label>
     </div>
     <div class="from-group">
         <label for="Username">User name:</label>
-        <InputText @bind-Value="UserProfile.Username" class="from-control" placeholder="user name"></InputText>
+        <InputText @bind-Value="UserProfile.Username" class="from-control" placeholder="User name"></InputText>
     </div>
     <div class="from-group">
         <label for="Firstname">Firstname:</label>
@@ -48,7 +48,7 @@
         <InputText @bind-Value="UserProfile.Aboutme" class="form-control" placeholder="who are you"></InputText>
     </div>
     <div>
-        <label for="Gender" class="form-group">Gender</label>
+        <label for="Gender" class="form-group" >Gender</label>
         <select @bind="UserProfile.Genderid" class="form-control">
             @foreach(var gender in repo.GetGenders())
             {
@@ -61,11 +61,11 @@
         <select @bind="UserProfile.Cityid" class="form-control">
         @foreach(var city in repo.GetCities())
         {
-             <option value="@city.Cityid">@city.city"</option>
+             <option value="@city.Cityid">@city.city</option>
         }
         </select>
     </div>
-    <button type="submit" class="btn btn-primary">Save Provile</button>
+    <button type="submit" class="btn btn-primary">Save Profile</button>
 </EditForm>
 
 @code {

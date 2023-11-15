@@ -7,13 +7,13 @@ namespace DatingApp.Repository
     public class UserRepository
     {
         private readonly IConfiguration _configuration;
-        private readonly string _connstring;
+        private readonly string _connstring;//connectionstring
         public UserRepository(IConfiguration Config)
         {
             _configuration = Config;
             _connstring = _configuration.GetConnectionString("DefaultConnection");
         }
-        public void AddAccountUser(User user) // add user
+        public void AddAccountUser(User user) //AddAccountUser to database
         {
             using (SqlConnection conn = new SqlConnection(_connstring))
             {
@@ -30,7 +30,7 @@ namespace DatingApp.Repository
                 conn.Close();
             }
         }
-        public User AuthenticateUser(string username, string password)//AuthenticateUser
+        public User AuthenticateUser(string username, string password)//AuthenticateUser tjeck if crorrect
         {
             using (SqlConnection conn = new SqlConnection(_connstring))
             {
@@ -57,7 +57,7 @@ namespace DatingApp.Repository
                 }
             }
         }
-        public User GetUser(int? userId, string username, string password, string email, string userrole)//GetUser
+        public User GetUser(int? userId, string username, string password, string email, string userrole)//GetUser from databas
         {
             using (SqlConnection conn = new SqlConnection(_connstring))
             {
@@ -93,7 +93,7 @@ namespace DatingApp.Repository
                 }
             }
         }
-        public List<City> GetCities()//GetCities
+        public List<City> GetCities()//GetCities from database
         {
             List<City> cities = new List<City>();
             using(SqlConnection conn = new SqlConnection(_connstring))
@@ -118,7 +118,7 @@ namespace DatingApp.Repository
             }
             return cities;
         }
-        public List<Gender> GetGenders()//GetGenders
+        public List<Gender> GetGenders()//GetGenders form database
         {
             List<Gender> genders = new List<Gender>();
             using(SqlConnection conn = new SqlConnection(_connstring))
@@ -142,7 +142,7 @@ namespace DatingApp.Repository
             }
             return genders;
         }
-        public void SaveUserProfile(UserProfile repo)
+        public void SaveUserProfile(UserProfile repo)//saveuserprofile to database
         {
             using (SqlConnection conn = new SqlConnection(_connstring))
             {
@@ -154,7 +154,7 @@ namespace DatingApp.Repository
                     cmd.Parameters.AddWithValue("@Brithdate", repo.Brithdate);
                     cmd.Parameters.AddWithValue("@Height", repo.Height);
                     cmd.Parameters.AddWithValue("@Firstname", repo.Firstname);
-                    cmd.Parameters.AddWithValue("@Middlename", repo.Middlename);
+                    cmd.Parameters.AddWithValue("@Middlename",(object)repo.Lastname ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@Lastname", repo.Lastname);
                     cmd.Parameters.AddWithValue("@Aboutme", repo.Aboutme);
                     cmd.Parameters.AddWithValue("@Cityid", repo.Cityid);
