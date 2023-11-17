@@ -106,7 +106,7 @@
         Iseditmode = !string.IsNullOrEmpty(editparam) && bool.Parse(editparam);
         if(Id != 0)
         {
-            UserProfile = repo.GetUserProfile(Id) ?? new UserProfile(); ;
+            UserProfile = repo.GetUserProfile(Id) ?? new UserProfile();
         }
         else
         {
