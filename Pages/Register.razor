@@ -23,5 +23,9 @@
         userRepo = new UserRepository(Iconfig);
         userRepo.AddAccountUser(user);
         NM.NavigateTo("/UserLogin");
+        user.Username = "";
+        user.Password1 = "";
+        user.Email = "";
+        user.Userrole = "";
     }
 }

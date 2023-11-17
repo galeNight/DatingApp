@@ -9,7 +9,7 @@
 
 <h3>Login</h3>
 
-<EditForm Model="@login" OnValidSubmit="LoginUser">
+<EditForm Model="login" OnValidSubmit="LoginUser">
     <DataAnnotationsValidator/>
     <ValidationSummary/>
     <InputText @bind-Value="login.Username" placeholder ="User name"></InputText>
@@ -46,5 +46,8 @@
         {
             errorMessage = "Invalid username or password. Please try again";
         }
+
+        login.Password1 = "";
+        login.Username = "";
     }
 }

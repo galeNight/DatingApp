@@ -17,7 +17,8 @@
 <p>City: @repo.GetcityName(UserProfile.Cityid)</p>
 <p>Gender: @repo.GetGenderName(UserProfile.Genderid)</p>
 
-<button @ onclick="CreateProfile">Edit Profile</button>
+<button @onclick="()=>NavigateToEditProfile(true)">Edit Profile</button>
+<button @onclick="Logout">Logout</button>
 
 @code{
     protected override void OnInitialized()
@@ -25,8 +26,13 @@
         int loggedInUser = authService.LoggedInUser?.UserId ?? 0;
         UserProfile = repo.GetUserProfile(loggedInUser);
     }
-    private void NavigateToCreateProfile()
+    private void NavigateToEditProfile(bool IsEditMode)
     {
-        NM.NavigateTo($"/CreateProfile/{UserProfile.UserId}");
+        NM.NavigateTo($"/CreateProfile/{UserProfile.UserId}?edit={IsEditMode}");
+    }
+    private void Logout()
+    {
+        authService.logout();
+        NM.NavigateTo("/UserLogin");
     }
 }
