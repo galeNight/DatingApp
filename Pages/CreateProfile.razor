@@ -66,9 +66,9 @@
         </select>
     </div>
     @if (Iseditmode)
-    {   
-    <button @onclick="UpdateProfile">Update Profile</button>
-    <button @onclick="CancelUpdate">cancel</button>
+    {
+        <button @onclick="UpdateProfile">Update Profile</button>
+        <button @onclick="CancelUpdate">cancel</button>
     }
     <button type="submit" class="btn btn-primary">Save Profile</button>
 </EditForm>
@@ -100,12 +100,13 @@
         Genders = repo.GetGenders();
         Cities = repo.GetCities();
         UserProfile.UserId = Id;
+        UserProfile = repo.GetUserProfile(Id);
         var uri = new Uri(NM.Uri);
         var editparam = System.Web.HttpUtility.ParseQueryString(uri.Query).Get("edit");
         Iseditmode = !string.IsNullOrEmpty(editparam) && bool.Parse(editparam);
         if(Id != 0)
         {
-            UserProfile = repo.GetUserProfile(Id);
+            UserProfile = repo.GetUserProfile(Id) ?? new UserProfile(); ;
         }
         else
         {
