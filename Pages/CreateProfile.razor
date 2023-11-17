@@ -52,20 +52,26 @@
         <select @bind="UserProfile.Genderid" class="form-control">
             @foreach(var gender in repo.GetGenders())
             {
-                <option value="@gender.GenderId">@gender.gender </option>
+                <option value="@gender.GenderId">@gender.gender</option>
             }
         </select>
     </div>
     <div class="form-group">
         <label for="City">City</label>
         <select @bind="UserProfile.Cityid" class="form-control">
-        @foreach(var city in repo.GetCities())
-        {
-             <option value="@city.Cityid">@city.city</option>
-        }
+            @foreach(var city in repo.GetCities())
+            {
+                <option value="@city.Cityid">@city.city</option>
+            }
         </select>
     </div>
     <button type="submit" class="btn btn-primary">Save Profile</button>
+    @if(UserProfile.Id > 0)
+    {
+        <button class="btn btn-success" @onclick="UpdateProfile">Update Profile</button>
+    }
+
+
 </EditForm>
 
 @code {
@@ -77,7 +83,12 @@
     private void SaveProfile()
     {
         repo.SaveUserProfile(UserProfile);
-        NM.NavigateTo("/");
+        NM.NavigateTo("/Profile");
+    }
+    private void UpdateProfile()
+    {
+        repo.UpdateUserProfile(UserProfile);
+        NM.NavigateTo("/Profile");
     }
     protected override void OnInitialized()
     {

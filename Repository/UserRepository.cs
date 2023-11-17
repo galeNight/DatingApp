@@ -30,7 +30,7 @@ namespace DatingApp.Repository
                 conn.Close();
             }
         }
-        public User AuthenticateUser(string username, string password)//AuthenticateUser tjeck if crorrect
+        public User AuthenticateUser(string username, string password)//AuthenticateUser tjeck of crorrect user login
         {
             using (SqlConnection conn = new SqlConnection(_connstring))
             {
@@ -142,6 +142,29 @@ namespace DatingApp.Repository
             }
             return genders;
         }
+        public void hasProfile(int userId, bool hasProfile)
+        {
+            using(SqlConnection conn = new SqlConnection(_connstring))
+            {
+                conn.Open();
+                if (!hasProfile)
+                {
+                    using(SqlCommand checkcmd = new SqlCommand("select count(*) from UserProfile where UserId = @UserId", conn))
+                    {
+                        checkcmd.Parameters.AddWithValue("@UserId", userId);
+                        int profilecount = (int)checkcmd.ExecuteScalar();
+                        hasProfile = profilecount > 0;
+                    }
+                }
+                using(SqlCommand cmd =new SqlCommand("update account set HasProfile = @HasProfile where UserId = @UserId",conn))
+                {
+                    cmd.Parameters.AddWithValue("@UserId", userId);
+                    cmd.Parameters.AddWithValue("@HasProfile", hasProfile);
+                    cmd.ExecuteNonQuery();
+                }
+                conn.Close();
+            }
+        }
         public void SaveUserProfile(UserProfile repo)//saveuserprofile to database
         {
             using (SqlConnection conn = new SqlConnection(_connstring))
@@ -162,6 +185,65 @@ namespace DatingApp.Repository
                     cmd.Parameters.AddWithValue("@UserId", repo.UserId);
                     cmd.ExecuteNonQuery();
                 }
+                hasProfile(repo.UserId, true);
+                conn.Close();
+            }
+        }
+        public UserProfile GetUserProfile(int userId)
+        {
+            using(SqlConnection conn = new SqlConnection(_connstring))
+            {
+                conn.Open();
+                using(SqlCommand cmd = new SqlCommand ("select * from UserProfile where UserId = @UserId",conn))
+                {
+                    cmd.Parameters.AddWithValue("UserId", userId);
+                    using(SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if(reader.Read())
+                        {
+                            return new UserProfile()
+                            {
+                                Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                                Username = reader.GetString(reader.GetOrdinal("Username")),
+                                Brithdate = reader.GetDateTime(reader.GetOrdinal("Brithdate")),
+                                Height = reader.GetString(reader.GetOrdinal("height")),
+                                Firstname = reader.GetString(reader.GetOrdinal("Firstname")),
+                                Middlename = reader.IsDBNull(reader.GetOrdinal("Middlename")) ? null : reader.GetString(reader.GetOrdinal("Middlename")),
+                                Lastname = reader.GetString(reader.GetOrdinal("Lastname")),
+                                Aboutme = reader.IsDBNull(reader.GetOrdinal("Aboutme")) ? null : reader.GetString(reader.GetOrdinal("Aboutme")),
+                                Cityid = reader.IsDBNull(reader.GetOrdinal("Cityid")) ? 0 : reader.GetInt32(reader.GetOrdinal("Cityid")),
+                                Genderid = reader.IsDBNull(reader.GetOrdinal("Genderid")) ? 0 : reader.GetInt32(reader.GetOrdinal("Genderid")),
+                                UserId = reader.GetInt32(reader.GetOrdinal("UserId")),
+                            };
+                        }
+                        return null; // User profile not found for the given user ID
+                    }
+                }
+            }
+        }
+        public void UpdateUserProfile(UserProfile userProfile)
+        {
+            using (SqlConnection conn = new SqlConnection(_connstring))
+            {
+                conn.Open();
+                using (SqlCommand cmd = new SqlCommand("UpdateUserProfile", conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@Id", userProfile.Id);
+                    cmd.Parameters.AddWithValue("@Username", userProfile.Username);
+                    cmd.Parameters.AddWithValue("@Brithdate", userProfile.Brithdate);
+                    cmd.Parameters.AddWithValue("@Height", userProfile.Height);
+                    cmd.Parameters.AddWithValue("@Firstname", userProfile.Firstname);
+                    cmd.Parameters.AddWithValue("@Middlename", (object)userProfile.Middlename ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@Lastname", userProfile.Lastname);
+                    cmd.Parameters.AddWithValue("@Aboutme", userProfile.Aboutme);
+                    cmd.Parameters.AddWithValue("@Cityid", userProfile.Cityid);
+                    cmd.Parameters.AddWithValue("@Genderid", userProfile.Genderid);
+                    cmd.Parameters.AddWithValue("@UserId", userProfile.UserId);
+
+                    cmd.ExecuteNonQuery();
+                }
+                hasProfile(userProfile.UserId, true);
                 conn.Close();
             }
         }
