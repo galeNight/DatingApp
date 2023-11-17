@@ -57,7 +57,7 @@ namespace DatingApp.Repository
                 }
             }
         }
-        public User GetUser(int? userId, string username, string password, string email, string userrole)//GetUser from databas
+        public User GetUser(int? userId, string username, string password, string email, string userrole)//GetUser from database
         {
             using (SqlConnection conn = new SqlConnection(_connstring))
             {
@@ -142,29 +142,7 @@ namespace DatingApp.Repository
             }
             return genders;
         }
-        public void hasProfile(int userId, bool hasProfile)
-        {
-            using(SqlConnection conn = new SqlConnection(_connstring))
-            {
-                conn.Open();
-                if (!hasProfile)
-                {
-                    using(SqlCommand checkcmd = new SqlCommand("select count(*) from UserProfile where UserId = @UserId", conn))
-                    {
-                        checkcmd.Parameters.AddWithValue("@UserId", userId);
-                        int profilecount = (int)checkcmd.ExecuteScalar();
-                        hasProfile = profilecount > 0;
-                    }
-                }
-                using(SqlCommand cmd =new SqlCommand("update account set HasProfile = @HasProfile where UserId = @UserId",conn))
-                {
-                    cmd.Parameters.AddWithValue("@UserId", userId);
-                    cmd.Parameters.AddWithValue("@HasProfile", hasProfile);
-                    cmd.ExecuteNonQuery();
-                }
-                conn.Close();
-            }
-        }
+
         public void SaveUserProfile(UserProfile repo)//saveuserprofile to database
         {
             using (SqlConnection conn = new SqlConnection(_connstring))
@@ -185,7 +163,6 @@ namespace DatingApp.Repository
                     cmd.Parameters.AddWithValue("@UserId", repo.UserId);
                     cmd.ExecuteNonQuery();
                 }
-                hasProfile(repo.UserId, true);
                 conn.Close();
             }
         }
@@ -240,11 +217,48 @@ namespace DatingApp.Repository
                     cmd.Parameters.AddWithValue("@Cityid", userProfile.Cityid);
                     cmd.Parameters.AddWithValue("@Genderid", userProfile.Genderid);
                     cmd.Parameters.AddWithValue("@UserId", userProfile.UserId);
-
                     cmd.ExecuteNonQuery();
                 }
-                hasProfile(userProfile.UserId, true);
                 conn.Close();
+            }
+        }
+        public string GetcityName(int cityId)
+        {
+            using(SqlConnection conn = new SqlConnection(_connstring))
+            {
+                conn.Open();
+                using(SqlCommand cmd =new SqlCommand("select city from City where Cityid = @Cityid", conn))
+                {
+                    cmd.Parameters.AddWithValue("@Cityid", cityId);
+                    return cmd.ExecuteScalar()?.ToString();
+                }
+            }
+        }
+        public string GetGenderName(int genderId)
+        {
+            using(SqlConnection conn = new SqlConnection(_connstring))
+            {
+                conn.Open();
+                using(SqlCommand cmd = new SqlCommand("select gender from Gender where Genderid = @Genderid", conn))
+                {
+                    cmd.Parameters.AddWithValue("@Genderid", genderId);
+                    return cmd.ExecuteScalar()?.ToString();
+                }
+            }
+        }
+        public bool UserHasProfile(int userId)
+        {
+            using(SqlConnection conn= new SqlConnection(_connstring))
+            {
+                conn.Open();
+                using(SqlCommand cmd = new SqlCommand("select top 1 1 from UserProfile Where UserId = @UserId",conn))
+                {
+                    cmd.Parameters.AddWithValue("@UserId", userId);
+                    using(SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        return reader.Read();
+                    }
+                }
             }
         }
     }

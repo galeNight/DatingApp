@@ -1,13 +1,32 @@
-﻿@page "/Profile"
+﻿@page "//Profile"
 @using DatingApp.Models
-@using DatingApp.Pages
 @using DatingApp.Repository
+@using DatingApp.Service
 @inject NavigationManager NM
-@inject UserProfile UserProfile
 @inject UserRepository repo
+@inject UserProfile UserProfile
+@inject AuthenticationService authService
+
 <h3>Profile</h3>
 
+<p>Username: @UserProfile.Username</p>
+<p>Fullname: @UserProfile.Fullname</p>
+<p>Brithdate: @UserProfile.Brithdate.ToShortDateString()</p>
+<p>Height: @UserProfile.Height</p>
+<p>About me: @UserProfile.Aboutme</p>
+<p>City: @repo.GetcityName(UserProfile.Cityid)</p>
+<p>Gender: @repo.GetGenderName(UserProfile.Genderid)</p>
 
-@code {
+<button @ onclick="CreateProfile">Edit Profile</button>
 
+@code{
+    protected override void OnInitialized()
+    {
+        int loggedInUser = authService.LoggedInUser?.UserId ?? 0;
+        UserProfile = repo.GetUserProfile(loggedInUser);
+    }
+    private void NavigateToCreateProfile()
+    {
+        NM.NavigateTo($"/CreateProfile/{UserProfile.UserId}");
+    }
 }

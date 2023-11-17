@@ -1,8 +1,10 @@
 ﻿@page "/UserLogin"
 @using DatingApp.Repository
 @using DatingApp.Models
+@using DatingApp.Service
 @inject UserRepository repo
 @inject NavigationManager NM
+@inject AuthenticationService authService
 @inject Login login
 
 <h3>Login</h3>
@@ -26,14 +28,17 @@
         User user = repo.AuthenticateUser(login.Username, login.Password1);
 
         if(user != null)
-        {    
-            if (user.HasProfile)
+        {
+            authService.setloggedinUser(user);
+            bool HasProfile = repo.UserHasProfile(user.UserId);
+            if (HasProfile)
             {
-                // Successful login
-                NM.NavigateTo("/Profile");
+                // Successful login go to profile if user have one
+                NM.NavigateTo("Profile");
             }
             else
             {
+                //redirect to create a Profile
                 NM.NavigateTo($"/CreateProfile/{user.UserId}");
             }
         }

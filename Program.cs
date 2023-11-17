@@ -1,6 +1,7 @@
 using DatingApp.Data;
 using DatingApp.Models;
 using DatingApp.Repository;
+using DatingApp.Service;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.Configuration;
@@ -17,10 +18,11 @@ namespace DatingApp
             builder.Services.AddRazorPages();
             builder.Services.AddServerSideBlazor();
             builder.Services.AddSingleton<WeatherForecastService>();
-            builder.Services.AddScoped<UserRepository>();
-            builder.Services.AddScoped<Login>();
             builder.Services.AddSingleton<User>();
             builder.Services.AddSingleton<UserProfile>();
+            builder.Services.AddScoped<UserRepository>();
+            builder.Services.AddScoped<Login>();
+            builder.Services.AddScoped<AuthenticationService>();
             builder.Configuration.GetConnectionString("DefaultConnection");
             var app = builder.Build();
 
