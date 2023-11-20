@@ -1,4 +1,5 @@
-﻿namespace DatingApp.Models
+﻿// City model class
+namespace DatingApp.Models
 {
     public class City
     {

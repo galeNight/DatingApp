@@ -1,4 +1,5 @@
-﻿@using DatingApp.Repository
+﻿@*Razor page for user registration*@
+@using DatingApp.Repository
 @using DatingApp.Models
 @inject UserRepository userRepo
 @inject NavigationManager NM
@@ -16,6 +17,7 @@
     <button type="submit">Register</button>
 </EditForm>
 
+@*Code block for handling user registration*@
 @code {
 
     private void RegisterUser()

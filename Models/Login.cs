@@ -1,4 +1,5 @@
-﻿namespace DatingApp.Models
+﻿// Login model class
+namespace DatingApp.Models
 {
     public class Login
     {

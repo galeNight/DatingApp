@@ -1,4 +1,5 @@
-﻿using DatingApp.Models;
+﻿// Repository class for database operations
+using DatingApp.Models;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -8,12 +9,13 @@ namespace DatingApp.Repository
     {
         private readonly IConfiguration _configuration;
         private readonly string _connstring;//connectionstring
-        public UserRepository(IConfiguration Config)
+        public UserRepository(IConfiguration Config) // Constructor to initialize the repository with a configuration
         {
             _configuration = Config;
             _connstring = _configuration.GetConnectionString("DefaultConnection");
         }
-        public void AddAccountUser(User user) //AddAccountUser to database
+        // Method to add an account user to the database
+        public void AddAccountUser(User user) 
         {
             using (SqlConnection conn = new SqlConnection(_connstring))
             {
@@ -30,7 +32,8 @@ namespace DatingApp.Repository
                 conn.Close();
             }
         }
-        public User AuthenticateUser(string username, string password)//AuthenticateUser tjeck of crorrect user login
+        // Method to authenticate a user based on username and password
+        public User AuthenticateUser(string username, string password) 
         {
             using (SqlConnection conn = new SqlConnection(_connstring))
             {
@@ -57,7 +60,8 @@ namespace DatingApp.Repository
                 }
             }
         }
-        public User GetUser(int? userId, string username, string password, string email, string userrole)//GetUser from database
+        // Method to get user information based on various parameters
+        public User GetUser(int? userId, string username, string password, string email, string userrole) 
         {
             using (SqlConnection conn = new SqlConnection(_connstring))
             {
@@ -93,7 +97,8 @@ namespace DatingApp.Repository
                 }
             }
         }
-        public List<City> GetCities()//GetCities from database
+        // Method to get a list of cities from the database
+        public List<City> GetCities()
         {
             List<City> cities = new List<City>();
             using(SqlConnection conn = new SqlConnection(_connstring))
@@ -118,6 +123,7 @@ namespace DatingApp.Repository
             }
             return cities;
         }
+        // Method to get a list of genders from the database
         public List<Gender> GetGenders()//GetGenders form database
         {
             List<Gender> genders = new List<Gender>();
@@ -142,8 +148,8 @@ namespace DatingApp.Repository
             }
             return genders;
         }
-
-        public void SaveUserProfile(UserProfile repo)//saveuserprofile to database
+        // Method to save user profile information to the database
+        public void SaveUserProfile(UserProfile repo)
         {
             using (SqlConnection conn = new SqlConnection(_connstring))
             {
@@ -166,6 +172,7 @@ namespace DatingApp.Repository
                 conn.Close();
             }
         }
+        // Method to get user profile information based on user ID
         public UserProfile GetUserProfile(int userId)
         {
             using(SqlConnection conn = new SqlConnection(_connstring))
@@ -198,6 +205,7 @@ namespace DatingApp.Repository
                 }
             }
         }
+        // Method to update user profile information in the database
         public void UpdateUserProfile(UserProfile userProfile)
         {
             using (SqlConnection conn = new SqlConnection(_connstring))
@@ -222,6 +230,7 @@ namespace DatingApp.Repository
                 conn.Close();
             }
         }
+        // Method to get the name of a city based on city ID
         public string GetcityName(int cityId)
         {
             using(SqlConnection conn = new SqlConnection(_connstring))
@@ -234,6 +243,7 @@ namespace DatingApp.Repository
                 }
             }
         }
+        // Method to get the name of a gender based on gender ID
         public string GetGenderName(int genderId)
         {
             using(SqlConnection conn = new SqlConnection(_connstring))
@@ -246,6 +256,7 @@ namespace DatingApp.Repository
                 }
             }
         }
+        // Method to check if a user has a profile in the database
         public bool UserHasProfile(int userId)
         {
             using(SqlConnection conn= new SqlConnection(_connstring))
@@ -258,6 +269,47 @@ namespace DatingApp.Repository
                     {
                         return reader.Read();
                     }
+                }
+            }
+        }
+        // metode to delete userprofile with StoredProcedure
+        public void DeleteProfile(int userId)
+        {
+            using(SqlConnection conn = new SqlConnection(_connstring))
+            {
+                conn.Open();
+                using(SqlCommand cmd = new SqlCommand("DeleteUserProfile", conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@UserId", userId);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+        // methode to delete useraccount with StoredProcedure
+        public void DeleteAccount(int userId)
+        {
+            using(SqlConnection conn = new SqlConnection(_connstring))
+            {
+                conn.Open();
+                using(SqlCommand cmd = new SqlCommand("DeleteProfileAndAccount", conn))
+                {
+                    cmd.CommandType= CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@UserId", userId);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+        public void DeleteProfileAndAccount(int userId)
+        {
+            using(SqlConnection conn = new SqlConnection(_connstring))
+            {
+                conn.Open();
+                using(SqlCommand cmd=new SqlCommand("DeleteProfileAndAccount", conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@UserId", userId);
+                    cmd.ExecuteNonQuery();
                 }
             }
         }

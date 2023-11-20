@@ -1,4 +1,5 @@
-﻿namespace DatingApp.Models
+﻿// Gender model class
+namespace DatingApp.Models
 {
     public class Gender
     {

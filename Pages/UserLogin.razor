@@ -1,4 +1,5 @@
-﻿@page "/UserLogin"
+﻿@*Razor page for user login*@
+@page "/UserLogin"
 @using DatingApp.Repository
 @using DatingApp.Models
 @using DatingApp.Service
@@ -21,6 +22,7 @@
     }
 </EditForm>
 
+@*Code block for handling user login*@
 @code {
     private string errorMessage = "";
     private void LoginUser()

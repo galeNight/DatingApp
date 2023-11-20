@@ -1,4 +1,5 @@
-﻿@page "/CreateProfile"
+﻿@*Razor page for creating or editing a user profile*@
+@page "/CreateProfile"
 @page "/CreateProfile/{id:int}"
 @using DatingApp.Models
 @using DatingApp.Pages
@@ -6,6 +7,7 @@
 @inject NavigationManager NM
 @inject UserProfile UserProfile
 @inject UserRepository repo
+@inject IJSRuntime JSRun
 
 <h3>CreateProfile</h3>
 
@@ -69,10 +71,12 @@
     {
         <button @onclick="UpdateProfile">Update Profile</button>
         <button @onclick="CancelUpdate">cancel</button>
+        <button @onclick="DeleteProfile">delete</button>
     }
     <button type="submit" class="btn btn-primary">Save Profile</button>
 </EditForm>
 
+@*Code block for handling CreateProfile page*@
 @code {
     [Parameter]
     public int Id{ get; set; }
@@ -124,5 +128,27 @@
         UserProfile.Aboutme = "";
         UserProfile.Genderid = 0;
         UserProfile.Cityid = 0;
+    }
+    private async Task<bool>Confirm(string message)
+    {
+        return await JSRun.InvokeAsync<bool>("confirm", message);
+    }
+    private async Task DeleteProfile()
+    {
+        var result = await Confirm("Are you sure you want to delete your profile?");
+        if (result)
+        {
+            var DeleteAccount = await Confirm("Do you want to delete your account as well?");
+            if (DeleteAccount)
+            {
+                repo.DeleteProfileAndAccount(UserProfile.UserId);
+                NM.NavigateTo("/UserLogin");
+            }
+            else
+            {
+                repo.DeleteProfile(UserProfile.UserId);
+                NM.NavigateTo("/UserLogin");
+            }
+        }
     }
 }

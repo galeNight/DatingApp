@@ -1,4 +1,5 @@
-﻿namespace DatingApp.Models
+﻿// UserProfile model class
+namespace DatingApp.Models
 {
     public class UserProfile
     {
