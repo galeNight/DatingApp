@@ -18,12 +18,13 @@
 <p>City: @repo.GetcityName(UserProfile.Cityid)</p>
 <p>Gender: @repo.GetGenderName(UserProfile.Genderid)</p>
 
-<h3>Likes Recived</h3>
+@*<h3>Likes Recived</h3>
 @foreach(var like in repo.GetLikesReceived(UserProfile.UserId))
 {
     <p>@like.Username</p>
 }
-<button @onclick="SendLike">Send Like</button>
+<button @onclick="SendLike">Send Like</button>*@
+
 <button @onclick="()=>NavigateToEditProfile(true)">Edit Profile</button>
 <button @onclick="Logout">Logout</button>
 
