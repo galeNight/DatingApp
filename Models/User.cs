@@ -9,5 +9,6 @@ namespace DatingApp.Models
         public string Email { get; set; }
         public string Userrole { get; set; }
         public bool HasProfile { get; set; }
+        public List<User> LikesReceived { get; set; }
     }
 }

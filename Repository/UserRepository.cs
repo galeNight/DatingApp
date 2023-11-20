@@ -300,6 +300,7 @@ namespace DatingApp.Repository
                 }
             }
         }
+        // methode to delete profile and account
         public void DeleteProfileAndAccount(int userId)
         {
             using(SqlConnection conn = new SqlConnection(_connstring))
@@ -312,6 +313,65 @@ namespace DatingApp.Repository
                     cmd.ExecuteNonQuery();
                 }
             }
+        }
+        // Method to add a like to the database and check if it already exists
+        public void AddLike(int senderUserId, int receiverUserId)
+        {
+            using(SqlConnection conn = new SqlConnection(_connstring))
+            {
+                conn.Open();
+                using(SqlCommand cmd = new SqlCommand("AddLike",conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@SenderUserId", senderUserId);
+                    cmd.Parameters.AddWithValue("@ReceiverUserId", receiverUserId);
+                    // Check if the like already exists
+                    using(SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (!reader.Read())
+                        {
+                            // Like does not exist, add it to the Likes table
+                            reader.Close();
+                            using(SqlCommand addlikecmd = new SqlCommand("InsertLike", conn))
+                            {
+                                addlikecmd.CommandType = CommandType.StoredProcedure;
+                                addlikecmd.Parameters.AddWithValue("@SenderUserId", senderUserId);
+                                addlikecmd.Parameters.AddWithValue("@ReceiverUserId", receiverUserId);
+                                addlikecmd.ExecuteNonQuery();
+                            }
+                        }
+                        // If the like already exists, you can handle it accordingly (throw an exception, log, etc.)
+                    }
+                }
+            }
+        }
+        // Method to retrieve likes received by a user
+        public List<User> GetLikesReceived(int receiverUserId)
+        {
+            List<User> LikeUsers= new List<User>();
+            using(SqlConnection conn = new SqlConnection(_connstring))
+            {
+                conn.Open();
+                using(SqlCommand cmd = new SqlCommand("GetLikeReceived",conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@ReceiverUserId", receiverUserId);
+                    using(SqlDataReader reader=cmd.ExecuteReader())
+                    {
+                        while(reader.Read())
+                        {
+                            User LikeUser= new User();
+                            {
+                                LikeUser.UserId = reader["SenderUserId"] is DBNull ? 0 : Convert.ToInt32(reader["SenderUserId"]);
+                                LikeUser.Username = reader["SenderUserName"].ToString();
+                            };
+                            LikeUsers.Add(LikeUser);
+
+                        }
+                    }
+                }
+            }
+            return LikeUsers;
         }
     }
 }

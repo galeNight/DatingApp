@@ -99,6 +99,11 @@
         repo.UpdateUserProfile(UserProfile);
         NM.NavigateTo("/Profile");
     }
+    protected override void OnParametersSet()
+    {
+        UserProfile.UserId = Id;
+    }
+
     protected override void OnInitialized()
     {
         Genders = repo.GetGenders();
