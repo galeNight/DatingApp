@@ -362,7 +362,7 @@ namespace DatingApp.Repository
                         {
                             User LikeUser= new User();
                             {
-                                LikeUser.UserId = reader["SenderUserId"] is DBNull ? 0 : Convert.ToInt32(reader["SenderUserId"]);
+                                LikeUser.UserId = int.Parse(reader["SenderUserId"].ToString());
                                 LikeUser.Username = reader["SenderUserName"].ToString();
                             };
                             LikeUsers.Add(LikeUser);
