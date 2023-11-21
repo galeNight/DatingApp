@@ -1,0 +1,57 @@
+﻿@page "/Userlist"
+@using DatingApp.Repository
+@using DatingApp.Service
+@using DatingApp.Models
+@inject User user
+@inject UserRepository repo
+@inject AuthenticationService authService
+
+<h3>User list</h3>
+
+@if(users != null && users.Where(u => u.UserId != authService.LoggedInUser?.UserId))
+{
+    <div>
+        @foreach(var user in users)
+        {
+            <div>
+                <h4>@user.Username: </h4>
+                <p><strong>Fullname: </strong>@user.Fullname</p>
+                <p><strong>Birthdate: </strong>@user.Brithdate.ToShortDateString()</p>
+                <p><strong>Height: </strong>@user.Height</p>
+                <p><strong>City: </strong>@repo.GetcityName(user.Cityid)</p>
+                <p><strong>Gender: </strong>@repo.GetGenderName(user.Genderid)</p>
+                <button @onclick="()=>ToogleLike(user.UserId)">Like</button>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <p>no users available</p>
+}
+
+@code {
+    private List<UserProfile> likedProfiles;
+    private List<UserProfile> users;
+    protected override void OnInitialized()
+    {
+        users = repo.GetAllUserProfiles();
+    }
+    private void ToogleLike(int Likee)
+    {
+        if (authService.LoggedInUser != null)
+        {
+            int liker = authService.LoggedInUser.UserId;
+            bool isLiked = repo.IsLiked(liker, Likee);
+            if (isLiked)
+            {
+                repo.RemovieLike(liker, Likee);
+            }
+            else
+            {
+                repo.AddLike(liker, Likee);
+            }
+            likedProfiles = repo.GetLikedProfiles(liker);
+        }
+    }
+}

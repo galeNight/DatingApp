@@ -1,5 +1,6 @@
 ﻿// Repository class for database operations
 using DatingApp.Models;
+using DatingApp.Pages;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -390,6 +391,38 @@ namespace DatingApp.Repository
                 }
             }
             return likedProfile;
+        }
+        public List<UserProfile> GetAllUserProfiles()
+        {
+            List<UserProfile> userProfile = new List<UserProfile>();
+            using(SqlConnection conn = new SqlConnection(_connstring))
+            {
+                conn.Open();
+                using(SqlCommand cmd = new SqlCommand("GetAllUserProfiles", conn))
+                {
+                    cmd.CommandType= CommandType.StoredProcedure;
+                    using(SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            UserProfile profile = new UserProfile();
+                            {
+                                profile.UserId = reader.GetInt32(reader.GetOrdinal("UserId"));
+                                profile.Username = reader.GetString(reader.GetOrdinal("username"));
+                                profile.Brithdate = reader.GetDateTime(reader.GetOrdinal("Brithdate"));
+                                profile.Height = reader.GetString(reader.GetOrdinal("Height"));
+                                profile.Firstname = reader.GetString(reader.GetOrdinal("Firstname"));
+                                profile.Middlename = reader.IsDBNull(reader.GetOrdinal("Middlename")) ? null : reader.GetString(reader.GetOrdinal("Middlename"));
+                                profile.Aboutme = reader.IsDBNull(reader.GetOrdinal("Aboutme")) ? null : reader.GetString(reader.GetOrdinal("Aboutme"));
+                                profile.Cityid = reader.IsDBNull(reader.GetOrdinal("Cityid")) ? 0 : reader.GetInt32(reader.GetOrdinal("Cityid"));
+                                profile.Genderid = reader.IsDBNull(reader.GetOrdinal("Genderid")) ? 0 : reader.GetInt32(reader.GetOrdinal("Genderid"));
+                            }
+                            userProfile.Add(profile);
+                        }
+                    }
+                }
+            }
+            return userProfile;
         }
     }
 }

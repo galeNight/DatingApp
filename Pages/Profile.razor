@@ -34,6 +34,7 @@ else
 }
 <button @onclick="()=>NavigateToEditProfile(true)">Edit Profile</button>
 <button @onclick="Logout">Logout</button>
+<button @onclick=UserList>Like User Page</button>
 
 @*Code block for handling Profile page*@
 @code{
@@ -53,21 +54,8 @@ else
         authService.logout();
         NM.NavigateTo("/UserLogin");
     }
-    private void ToogleLike(int Likee)
+    private void UserList()
     {
-        if (authService.LoggedInUser != null)
-        {
-            int liker = authService.LoggedInUser.UserId;
-            bool isLiked = repo.IsLiked(liker,Likee);
-            if (isLiked)
-            {
-                repo.RemovieLike(liker, Likee);
-            }
-            else
-            {
-                repo.AddLike(liker, Likee);
-            }
-            likedProfiles = repo.GetLikedProfiles(liker);
-        }
+        NM.NavigateTo("/Userlist");
     }
 }
