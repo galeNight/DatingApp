@@ -22,9 +22,9 @@
 @if(likedProfiles != null && likedProfiles.Any())
 {
     <ul>
-        @foreach(var likedprofile in likedProfiles)
+        @foreach(var profile in likedProfiles)
         {
-            <li>@likedprofile.Username</li>
+            <li>@profile.Username</li>
         }
     </ul>
 }
