@@ -5,13 +5,14 @@
 @inject User user
 @inject UserRepository repo
 @inject AuthenticationService authService
+@inject NavigationManager NM
 
+<button @onclick=ToProfile>Profile page</button>
 <h3>User list</h3>
-
-@if(users != null && users.Where(u => u.UserId != authService.LoggedInUser?.UserId))
+@if(users != null && users.Any())
 {
     <div>
-        @foreach(var user in users)
+        @foreach (var user in users.Where(u => u.UserId != authService.LoggedInUser?.UserId))
         {
             <div>
                 <h4>@user.Username: </h4>
@@ -31,11 +32,12 @@ else
 }
 
 @code {
-    private List<UserProfile> likedProfiles;
+    private List<int> DisplayedUserIds;
     private List<UserProfile> users;
     protected override void OnInitialized()
     {
         users = repo.GetAllUserProfiles();
+        DisplayedUserIds = new List<int>();
     }
     private void ToogleLike(int Likee)
     {
@@ -51,7 +53,12 @@ else
             {
                 repo.AddLike(liker, Likee);
             }
-            likedProfiles = repo.GetLikedProfiles(liker);
+            users = repo.GetAllUserProfiles().Where(u => u.UserId != authService.LoggedInUser.UserId && !DisplayedUserIds.Contains(u.UserId)).ToList();
+            StateHasChanged();
         }
+    }
+    private void ToProfile()
+    {
+        NM.NavigateTo("/Profile");
     }
 }
