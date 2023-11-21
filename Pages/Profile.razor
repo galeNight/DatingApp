@@ -18,6 +18,20 @@
 <p>City: @repo.GetcityName(UserProfile.Cityid)</p>
 <p>Gender: @repo.GetGenderName(UserProfile.Genderid)</p>
 
+<h4>Liked profiles</h4>
+@if(likedProfiles != null && likedProfiles.Any())
+{
+    <ul>
+        @foreach(var likedprofile in likedProfiles)
+        {
+            <li>@likedprofile.Username</li>
+        }
+    </ul>
+}
+else
+{
+    <p>no liked profiles.</p>
+}
 <button @onclick="()=>NavigateToEditProfile(true)">Edit Profile</button>
 <button @onclick="Logout">Logout</button>
 

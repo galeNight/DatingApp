@@ -314,6 +314,7 @@ namespace DatingApp.Repository
                 }
             }
         }
+        // methode add Like
         public void AddLike(int liker,int likee)
         {
             using(SqlConnection conn =new SqlConnection(_connstring))
@@ -328,6 +329,7 @@ namespace DatingApp.Repository
                 }
             }
         }
+        // remove Like
         public void RemovieLike(int liker,int likee)
         {
             using(SqlConnection conn = new SqlConnection(_connstring))
@@ -342,6 +344,7 @@ namespace DatingApp.Repository
                 }
             }
         }
+        // methode is Liked
         public bool IsLiked(int liker,int likee)
         {
             using(SqlConnection conn = new SqlConnection(_connstring))
@@ -362,6 +365,7 @@ namespace DatingApp.Repository
                 }
             }
         }
+        // methode to get getLikedProfile
         public List<UserProfile>GetLikedProfiles(int liker)
         {
             List<UserProfile>likedProfile = new List<UserProfile>();
