@@ -316,7 +316,7 @@ namespace DatingApp.Repository
             }
         }
         // methode add Like
-        public void AddLike(int liker,int likee)// 
+        public void AddLike(int liker,int likee)// conflit foreign key
         {
             using(SqlConnection conn =new SqlConnection(_connstring))
             {
