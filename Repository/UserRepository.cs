@@ -211,7 +211,7 @@ namespace DatingApp.Repository
             using (SqlConnection conn = new SqlConnection(_connstring))
             {
                 conn.Open();
-                using (SqlCommand cmd = new SqlCommand("UpdateUserProfile", conn))
+                using (SqlCommand cmd = new SqlCommand("UpdateUSerProfile", conn))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@Id", userProfile.Id);
@@ -314,64 +314,78 @@ namespace DatingApp.Repository
                 }
             }
         }
-        // Method to add a like to the database and check if it already exists
-        public void AddLike(int senderUserId, int receiverUserId)
+        public void AddLike(int liker,int likee)
         {
-            using(SqlConnection conn = new SqlConnection(_connstring))
+            using(SqlConnection conn =new SqlConnection(_connstring))
             {
                 conn.Open();
-                using(SqlCommand cmd = new SqlCommand("AddLike",conn))
+                using(SqlCommand cmd = new SqlCommand("AddLike", conn))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@SenderUserId", senderUserId);
-                    cmd.Parameters.AddWithValue("@ReceiverUserId", receiverUserId);
-                    // Check if the like already exists
-                    using(SqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        if (!reader.Read())
-                        {
-                            // Like does not exist, add it to the Likes table
-                            reader.Close();
-                            using(SqlCommand addlikecmd = new SqlCommand("InsertLike", conn))
-                            {
-                                addlikecmd.CommandType = CommandType.StoredProcedure;
-                                addlikecmd.Parameters.AddWithValue("@SenderUserId", senderUserId);
-                                addlikecmd.Parameters.AddWithValue("@ReceiverUserId", receiverUserId);
-                                addlikecmd.ExecuteNonQuery();
-                            }
-                        }
-                        // If the like already exists, you can handle it accordingly (throw an exception, log, etc.)
-                    }
+                    cmd.Parameters.AddWithValue("Liker", liker);
+                    cmd.Parameters.AddWithValue("@Likee", likee);
+                    cmd.ExecuteNonQuery();
                 }
             }
         }
-        // Method to retrieve likes received by a user
-        public List<User> GetLikesReceived(int receiverUserId)
+        public void RemovieLike(int liker,int likee)
         {
-            List<User> LikeUsers= new List<User>();
             using(SqlConnection conn = new SqlConnection(_connstring))
             {
                 conn.Open();
-                using(SqlCommand cmd = new SqlCommand("GetLikeReceived",conn))
+                using(SqlCommand cmd = new SqlCommand("RemoveLike",conn))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@ReceiverUserId", receiverUserId);
-                    using(SqlDataReader reader=cmd.ExecuteReader())
+                    cmd.Parameters.AddWithValue("@Liker", liker);
+                    cmd.Parameters.AddWithValue("@Likee", likee);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+        public bool IsLiked(int liker,int likee)
+        {
+            using(SqlConnection conn = new SqlConnection(_connstring))
+            {
+                conn.Open();
+                using(SqlCommand cmd = new SqlCommand("CheckLikeStatus",conn))
+                {
+                    cmd.CommandType= CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@Liker", liker);
+                    cmd.Parameters.AddWithValue("@Likee", likee);
+                    SqlParameter IsLiked = new SqlParameter("@IsLiked",SqlDbType.Bit);
                     {
-                        while(reader.Read())
+                        IsLiked.Direction = ParameterDirection.Output;
+                    }
+                    cmd.Parameters.Add(IsLiked);
+                    cmd.ExecuteNonQuery();
+                    return (bool)IsLiked.Value;
+                }
+            }
+        }
+        public List<UserProfile>GetLikedProfiles(int liker)
+        {
+            List<UserProfile>likedProfile = new List<UserProfile>();
+            using(SqlConnection conn = new SqlConnection(_connstring))
+            {
+                conn.Open();
+                using(SqlCommand cmd = new SqlCommand("GetLikedProfiles",conn))
+                {
+                    cmd.CommandType= CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@Liker", liker);
+                    using(SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
                         {
-                            User LikeUser= new User();
+                            UserProfile profile = new UserProfile();
                             {
-                                LikeUser.UserId = int.Parse(reader["SenderUserId"].ToString());
-                                LikeUser.Username = reader["SenderUserName"].ToString();
+                                profile.UserId = (int)reader["UserId"];
                             };
-                            LikeUsers.Add(LikeUser);
-
+                            likedProfile.Add(profile);
                         }
                     }
                 }
             }
-            return LikeUsers;
+            return likedProfile;
         }
     }
 }
