@@ -316,7 +316,7 @@ namespace DatingApp.Repository
             }
         }
         // methode add Like
-        public void AddLike(int liker,int likee)// conflit foreign key
+        public void AddLike(int liker,int likee, int statuss)// conflit foreign key
         {
             using(SqlConnection conn =new SqlConnection(_connstring))
             {
@@ -324,8 +324,9 @@ namespace DatingApp.Repository
                 using(SqlCommand cmd = new SqlCommand("AddLike", conn))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("Liker", liker);
+                    cmd.Parameters.AddWithValue("@Liker", liker);
                     cmd.Parameters.AddWithValue("@Likee", likee);
+                    cmd.Parameters.AddWithValue("@Statuss", statuss);
                     cmd.ExecuteNonQuery();
                 }
             }

@@ -51,7 +51,7 @@ else
             }
             else
             {
-                repo.AddLike(liker, Likee);
+                repo.AddLike(liker, Likee,1);
             }
             users = repo.GetAllUserProfiles().Where(u => u.UserId != authService.LoggedInUser.UserId && !DisplayedUserIds.Contains(u.UserId)).ToList();
             StateHasChanged();
