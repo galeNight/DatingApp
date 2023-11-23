@@ -316,18 +316,22 @@ namespace DatingApp.Repository
             }
         }
         // methode add Like
-        public void AddLike(int liker,int likee, int statuss)// conflit foreign key
+        public void AddLike(int liker,int likee, int statuss)
+
         {
-            using(SqlConnection conn =new SqlConnection(_connstring))
+            using (SqlConnection conn = new SqlConnection(_connstring))
             {
                 conn.Open();
-                using(SqlCommand cmd = new SqlCommand("AddLike", conn))
+                using (SqlCommand cmd = new SqlCommand("AddLike", conn))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@Liker", liker);
                     cmd.Parameters.AddWithValue("@Likee", likee);
                     cmd.Parameters.AddWithValue("@Statuss", statuss);
-                    cmd.ExecuteNonQuery();
+                    cmd.ExecuteNonQuery();// conflit foreign key
+                                          // The INSERT statement conflicted with the FOREIGN KEY constraint "FK__likes__Liker__70DDC3D8".
+                                          // The conflict occurred in database "DatingApp", table "dbo.UserProfile", column 'Id'.
+                                          // The statement has been terminated.'
                 }
             }
         }

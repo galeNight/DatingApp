@@ -38,12 +38,13 @@ else
     {
         users = repo.GetAllUserProfiles();
         DisplayedUserIds = new List<int>();
+
     }
     private void ToogleLike(int Likee)
     {
         if (authService.LoggedInUser != null)
         {
-            int liker = authService.LoggedInUser.UserId;
+            int liker = authService.LoggedInUser.UserId;//this need to chance
             bool isLiked = repo.IsLiked(liker, Likee);
             if (isLiked)
             {
@@ -51,7 +52,7 @@ else
             }
             else
             {
-                repo.AddLike(liker, Likee,1);
+                repo.AddLike(liker,Likee,1);
             }
             users = repo.GetAllUserProfiles().Where(u => u.UserId != authService.LoggedInUser.UserId && !DisplayedUserIds.Contains(u.UserId)).ToList();
             StateHasChanged();
