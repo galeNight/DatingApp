@@ -44,7 +44,7 @@ else
     {
         if (authService.LoggedInUser != null)
         {
-            int liker = authService.LoggedInUser.UserId;//this need to chance
+            int liker = authService.LoggedInUser.UserId;//this need to chance using account userid. need to use Userprofile.UserId from my Userprofile table
             bool isLiked = repo.IsLiked(liker, Likee);
             if (isLiked)
             {
